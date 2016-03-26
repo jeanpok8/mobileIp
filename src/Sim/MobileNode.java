@@ -11,6 +11,8 @@ public class MobileNode extends Node{
 		super(network, node);
 		this.mIdentity 	= mIdentity;
 		this.mHA 		= mHA;
+		// Sending a solicitation msg
+		SendRouterSolicitation();
 	}
 	public void recv(SimEnt src, Event ev)
 	{
@@ -31,6 +33,7 @@ public class MobileNode extends Node{
 				if(mRA.ismRouterHasFA()){
 					ICMPBindingUpdate toFA = new ICMPBindingUpdate(mRA.source(), mHA,
 							_id, mHA, mIdentity);
+					send(_peer, toFA, 0);
 				}
 			}
 			if(ev instanceof ICMPBindingAck)

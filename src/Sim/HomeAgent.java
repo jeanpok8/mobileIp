@@ -34,14 +34,15 @@ public class HomeAgent extends Node{
 		if(ev instanceof Tunnel){
 			// take out the message and change the source address
 			Message mMsg = ((Tunnel) ev).getmMessage();
-			Message mTempMessage = new Message(_id, mMsg._destination, mMsg._seq);
+			//Message mTempMessage = new Message(_id, mMsg._destination, mMsg._seq);
 			// send the message to the corresponding node
-			send(_peer, mTempMessage,0);
+			send(_peer, mMsg,0);
 		}
 		if(ev instanceof Message){
 			Message mMsg = (Message) ev;
-			Tunnel mTunnel = new Tunnel(mMsg._source, mBindingTable.elements().nextElement(), mMsg._seq, mMsg);
+			Tunnel mTunnel = new Tunnel(mMsg._source, new NetworkAddr(2, 1), mMsg._seq, mMsg);
 			send(_peer , mTunnel, 0);
+			System.out.println("HA tunneld a message form ("+ mMsg.source().networkId() +","+ mMsg.source().nodeId()+")");
 		}
 		}
 }

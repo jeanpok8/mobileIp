@@ -14,6 +14,11 @@ public class MobileNode extends Node{
 	}
 	public void recv(SimEnt src, Event ev)
 	{
+		if(ev instanceof Tunnel){
+			System.out.println("Node "+_id.networkId()+ "." + _id.nodeId() +
+					" receives message from HA seq: "+((Message) ev).seq() +
+					" at time "+SimEngine.getTime());
+		}
 		if (ev instanceof ICMP)
 		{
 			System.out.println("Node "+_id.networkId()+ "." + _id.nodeId() +
@@ -33,7 +38,7 @@ public class MobileNode extends Node{
 				System.out.println("MN received a binding ACK, everything is working just fine :D");
 			}
 		}
-		}
+	}
 	public void SendRouterSolicitation(){
 		// I assume (0,0) is the layer 3 broadcast address
 		ICMPRouterSolicitation RC = new ICMPRouterSolicitation(_id,new NetworkAddr(0, 0)); 

@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 public class HomeAgent extends Node{
 
-	private Hashtable<Integer, NetworkAddr> mBindingTable = new Hashtable<>();
+	private Hashtable<Integer, NetworkAddr> mBindingTable = new Hashtable<Integer, NetworkAddr>();
 	
 	public HomeAgent(int network, int node) {
 		super(network, node);
@@ -31,5 +31,17 @@ public class HomeAgent extends Node{
 				send(_peer , toMN, 0);
 				}
 			}
+		if(ev instanceof Tunnel){
+			// take out the message and change the source address
+			Message mMsg = ((Tunnel) ev).getmMessage();
+			Message mTempMessage = new Message(_id, mMsg._destination, mMsg._seq);
+			// send the message to the corresponding node
+			send(_peer, mTempMessage,0);
+		}
+		if(ev instanceof Message){
+			Message mMsg = (Message) ev;
+			Tunnel mTunnel = new Tunnel(mMsg._source, mBindingTable.elements().nextElement(), mMsg._seq, mMsg);
+			send(_peer , mTunnel, 0);
+		}
 		}
 }

@@ -46,7 +46,7 @@ public class Run {
 		routeNodeB.connectFA(mFA);
 		
 		host1.StartSending(1, 1, 1, 5, 1);
-		  
+		mMN.SendRouterSolicitation(5);
 		// Start the simulation engine and of we go!
 		Thread t = new Thread(SimEngine.instance());
 

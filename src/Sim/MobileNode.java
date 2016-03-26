@@ -11,8 +11,6 @@ public class MobileNode extends Node{
 		super(network, node);
 		this.mIdentity 	= mIdentity;
 		this.mHA 		= mHA;
-		// Sending a solicitation msg
-		SendRouterSolicitation();
 	}
 	public void recv(SimEnt src, Event ev)
 	{
@@ -29,6 +27,7 @@ public class MobileNode extends Node{
 			if(ev instanceof ICMPRouterAdvertisement)
 			{
 				// Look at the router advertisement, if the router has a FA send a binding update
+				System.out.println(" The mobile node recived a router advertisement ");
 				ICMPRouterAdvertisement mRA = (ICMPRouterAdvertisement) ev;
 				if(mRA.ismRouterHasFA()){
 					ICMPBindingUpdate toFA = new ICMPBindingUpdate(mRA.source(), mHA,
@@ -42,10 +41,10 @@ public class MobileNode extends Node{
 			}
 		}
 	}
-	public void SendRouterSolicitation(){
+	public void SendRouterSolicitation(int mDelay){
 		// I assume (0,0) is the layer 3 broadcast address
 		ICMPRouterSolicitation RC = new ICMPRouterSolicitation(_id,new NetworkAddr(0, 0)); 
-		send(_peer,RC,0);
+		send(_peer,RC, mDelay);
 	}
 	public NetworkAddr getmHA() {
 		return mHA;

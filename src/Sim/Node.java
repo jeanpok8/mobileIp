@@ -4,10 +4,10 @@ package Sim;
 // and it count messages send and received.
 
 public class Node extends SimEnt {
-	private NetworkAddr _id;
-	private SimEnt _peer; // simulation entity.
-	private int _sentmsg=0;
-	private int _seq = 0;
+	protected NetworkAddr _id;
+	protected SimEnt _peer; // simulation entity.
+	protected int _sentmsg=0;
+	protected int _seq = 0;
 
 	
 	public Node (int network, int node)

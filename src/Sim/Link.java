@@ -1,15 +1,17 @@
 package Sim;
 
-/* This class implements a link without any loss, jitter or delay*/
+// This class implements a link without any loss, jitter or delay
 
 public class Link extends SimEnt{
-	private SimEnt _connectorA=null;
-	private SimEnt _connectorB=null;
-	private int _now=0;
+	protected SimEnt _connectorA=null;
+	protected SimEnt _connectorB=null;
+	protected int _now=0;
+	protected int _mIdentity;
 	
-	public Link()
+	public Link(int identety)
 	{
-		super();	
+		super();
+		_mIdentity = identety;
 	}
 	
 	// Connects the link to some simulation entity like
@@ -24,22 +26,22 @@ public class Link extends SimEnt{
 	}
 
 	// Called when a message enters the link
-	
 	public void recv(SimEnt src, Event ev)
 	{
 		if (ev instanceof Message)
 		{
-			System.out.println("Link recv msg, passes it through");
-			
+			System.out.println("Link "+ _mIdentity +"  passes msg through with seq: "+ ((Message) ev).seq()+
+					" from node: " + ((Message) ev).source().networkId()+"." + ((Message) ev).source().nodeId()+
+					" to node: " + ((Message) ev).destination().networkId()+"." + ((Message) ev).destination().nodeId()
+					+ " at time " + SimEngine.getTime());
+			}
 			if (src == _connectorA)
 			{
 				send(_connectorB, ev, _now);
 			}
 			else
-			
 			{
 				send(_connectorA, ev, _now);
 			}
 		}
-	}	
-}
+	}

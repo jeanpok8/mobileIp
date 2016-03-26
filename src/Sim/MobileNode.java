@@ -12,8 +12,10 @@ public class MobileNode extends Node{
 		this.mIdentity 	= mIdentity;
 		this.mHA 		= mHA;
 	}
+	@Override
 	public void recv(SimEnt src, Event ev)
 	{
+		System.out.println("------------------------");
 		if(ev instanceof Tunnel){
 			System.out.println("Node "+_id.networkId()+ "." + _id.nodeId() +
 					" receives message from HA seq: "+((Message) ev).seq() +

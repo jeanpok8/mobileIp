@@ -5,11 +5,11 @@ package Sim;
 public class Run {
 	public static void main(String[] args) {
 		// Creates two links
-		Link link1 = new Link();
-		Link link2 = new Link();
-		Link link3 = new Link();// serial link.
-		Link link4 = new Link();
-		Link link5 = new Link();
+		Link link1 = new Link(1);
+		Link link2 = new Link(2);
+		Link link3 = new Link(3);// serial link.
+		Link link4 = new Link(4);
+		Link link5 = new Link(5);
 		
 
 		

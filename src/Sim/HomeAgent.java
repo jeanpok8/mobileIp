@@ -40,9 +40,9 @@ public class HomeAgent extends Node{
 		}
 		if(ev instanceof Message){
 			Message mMsg = (Message) ev;
-			Tunnel mTunnel = new Tunnel(mMsg._source, new NetworkAddr(2, 1), mMsg._seq, mMsg);
+			Tunnel mTunnel = new Tunnel(_id, new NetworkAddr(2, 1), mMsg._seq, mMsg);
 			send(_peer , mTunnel, 0);
-			System.out.println("HA tunneld a message form ("+ mMsg.source().networkId() +","+ mMsg.source().nodeId()+")");
+			System.out.println("HA tunneld a message form "+ mMsg.source().networkId() +"."+ mMsg.source().nodeId());
 		}
 		}
 }

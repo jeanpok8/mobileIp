@@ -89,10 +89,11 @@ public class Router extends SimEnt {
 			if (getInterface(((Message) event).destination().networkId()) != null) {
 				SimEnt sendNext = getInterface(((Message) event).destination().networkId());
 				send(sendNext, event, _now);
-				System.out.println(_name + " handles packet with seq: " + ((Message) event).seq() + " from node: "
-						+ ((Message) event).source().networkId() + "." + ((Message) event).source().nodeId());
-                       System.out.println(_name + " Router sends to node: " + ((Message) event).destination().networkId() + "."
-						+ ((Message) event).destination().nodeId());
+				System.out.println(_name + " handles packet with seq: " + ((Message) event).seq()+
+						" from node: "+((Message) event).source().networkId()+"." + ((Message) event).source().nodeId()
+						+" to node "+((Message) event).destination().networkId()+"."+((Message) event).destination().nodeId());
+                       System.out.println(_name + " sends to node: " + ((Message) event).destination().networkId()+"." +
+						((Message) event).destination().nodeId());
 
 			} else {
 

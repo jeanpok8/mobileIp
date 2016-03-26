@@ -15,10 +15,6 @@ public class Router extends SimEnt {
 	private Map<SimEnt, SimEnt> temporalTable;// routing table for
 	public String _name;
 	SimEnt _router;
-	
-	// The foreign and home agent
-	private NetworkAddr mFAAddr;
-	private NetworkAddr mHAAddr;
 
 	// When created, number of interfaces are defined
 
@@ -66,7 +62,7 @@ public class Router extends SimEnt {
 	/*
 	 * This method searches for an entry in the routing table that matches the
 	 * network number in the destination field of a messages. The link
-	 * represents that network number is returned .
+	 * represents that network number is returned
 	 */
 
 	private SimEnt getInterface(int networkAddress) {
@@ -102,29 +98,5 @@ public class Router extends SimEnt {
 				send(temporalTable.get(_router), event,SimEngine.getTime());
 			}
 		}
-		// when the router get a solicitation message it will look
-		// if it has a foreign or home agent connected to it
-		// then it will create a RA and sent it to the source of the RC
-		if (event instanceof ICMPRouterSolicitation) {
-			ICMPRouterSolicitation mRC = (ICMPRouterSolicitation) event;
-			ICMPRouterAdvertisement mRA = new ICMPRouterAdvertisement(new NetworkAddr(0, 0), mRC.source());
-			if(mHAAddr != null){
-				mRA.setmRouterHasHA(true);
-				mRA.setmHA(mHAAddr);
-			}
-			if(mFAAddr != null){
-				mRA.setmRouterHasFA(true);
-				mRA.setmFA(mFAAddr);
-			}
-			// send the message to the source 
-		}
-	}
-	// Connect the foreign agent to the Router.
-	public void connectFA(ForeignAgent mAgent){
-		mFAAddr = mAgent._id;
-	}
-	// Connect the home agent to the Router.
-	public void connectHA(HomeAgent mAgent){
-		mHAAddr = mAgent._id;
 	}
 }

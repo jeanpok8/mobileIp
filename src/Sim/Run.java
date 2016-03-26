@@ -8,54 +8,45 @@ public class Run {
 		Link link1 = new Link();
 		Link link2 = new Link();
 		Link link3 = new Link();// serial link.
+		Link link4 = new Link();
+		Link link5 = new Link();
 		
 
-		// Create two end hosts that will be
-		// communicating via the router
-		Node host1 = new Node(1, 1);
-		Node host2 = new Node(2, 1);
-
-		// Connect links to hosts
+		
+		Node host1 = new Node(1, 2);
 		host1.setPeer(link1);
-		host2.setPeer(link2);
-
-		// Creates as router and connect
-		// links to it. Information about
-		// the host connected to the other
-		// side of the link is also provided
-		// Note. A switch is created in same way using the Switch class
-
-		// Router routeNode = new Router(2,null);
-
+		
+		HomeAgent mHA = new HomeAgent(1,1);
+		mHA.setPeer(link2);
+		
+		ForeignAgent mFA = new ForeignAgent(2, 2);
+		mFA.setPeer(link5);
+		
+		MobileNode mMN = new MobileNode(2, 1, 22545, new NetworkAddr(1, 1));
+		mMN.setPeer(link4);
+		
+		// Set the serial interface
 		Router routeNodeA = new Router(3, "RouterA");
 		Router routeNodeB = new Router(3, "RouterB");
-		
-
 		routeNodeA.setPeer(link3);
 		routeNodeB.setPeer(link3);
-		
-
 		routeNodeA.serialInterface(2, link3, routeNodeB);
 		routeNodeB.serialInterface(2, link3, routeNodeA);
-
-		 // routeNode.connectInterface(0, link1, host1);
-		// routeNode.connectInterface(1, link2, host2);
-
-		  routeNodeA.connectInterface(0, link1, host1);
-		  routeNodeB.connectInterface(0, link2, host2);
-
-		  //Switch suitch = new Switch(2);
-		 // suitch.connectPort(0, link1, host1);
-		 // suitch.connectPort(1, link2, host2);
-
-		// Generate some traffic
-		// host1 will send 3 messages with time interval 5 to network 2, node 1.
-		// Sequence starts with number 1
-		host1.StartSending(2, 1, 1, 5, 1);
-		// host2 will send 2 messages with time interval 10 to network 1, node
-		// 1. Sequence starts with number 10
-		host2.StartSending(1, 1, 1, 10, 10);
-
+		//----------------------------------------------
+		
+		
+		routeNodeA.connectInterface(0, link1, host1);
+		routeNodeA.connectInterface(1, link2, mHA);
+		
+		routeNodeB.connectInterface(0, link4, mMN);
+		routeNodeB.connectInterface(1, link5, mFA);
+		
+		// pass HA and FA addresses to the routers
+		routeNodeA.connectHA(mHA);
+		routeNodeB.connectFA(mFA);
+		
+		host1.StartSending(1, 1, 1, 5, 1);
+		  
 		// Start the simulation engine and of we go!
 		Thread t = new Thread(SimEngine.instance());
 

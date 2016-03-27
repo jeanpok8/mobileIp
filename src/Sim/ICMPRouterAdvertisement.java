@@ -7,23 +7,24 @@ public class ICMPRouterAdvertisement extends ICMP{
 	 * Does the router has a FA connected to it, FA address if so
 	 * Does the router has a HA connected to it, HA address if so
 	 * */
-	private boolean mRouterHasFA;
+	//private boolean mRouterHasFA;
 	private boolean mRouterHasHA;
 	private NetworkAddr mHA;
-	private NetworkAddr mFA;
+	//private NetworkAddr mFA;
+	private NetworkAddr CoA ;
 	
 	ICMPRouterAdvertisement(NetworkAddr from, NetworkAddr to) {
 		super(from, to);
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean ismRouterHasFA() {
-		return mRouterHasFA;
-	}
+//	public boolean ismRouterHasFA() {
+//		return mRouterHasFA;
+//	}
 
-	public void setmRouterHasFA(boolean mRouterHasFA) {
-		this.mRouterHasFA = mRouterHasFA;
-	}
+//	public void setmRouterHasFA(boolean mRouterHasFA) {
+//		this.mRouterHasFA = mRouterHasFA;
+//	}
 
 	public boolean ismRouterHasHA() {
 		return mRouterHasHA;
@@ -41,11 +42,19 @@ public class ICMPRouterAdvertisement extends ICMP{
 		this.mHA = mHA;
 	}
 
-	public NetworkAddr getmFA() {
-		return mFA;
+	public NetworkAddr getCoA() {
+		return CoA;
 	}
 
-	public void setmFA(NetworkAddr mFA) {
-		this.mFA = mFA;
+	public void setCoA(NetworkAddr coA) {
+		CoA = coA;
 	}
+
+//	public NetworkAddr getmFA() {
+//		return mFA;
+//	}
+
+//	public void setmFA(NetworkAddr mFA) {
+//		this.mFA = mFA;
+//	}
 }

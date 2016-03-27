@@ -15,38 +15,43 @@ public class MobileNode extends Node{
 	@Override
 	public void recv(SimEnt src, Event ev)
 	{
-		System.out.println("------------------------");
+		// send a solicitation 
+		if(ev instanceof TimerEvent){
+			// I assume (0,0) is the layer 3 broadcast address
+
+		}
 		if(ev instanceof Tunnel){
 			System.out.println("Node "+_id.networkId()+ "." + _id.nodeId() +
-					" receives message from HA seq: "+((Message) ev).seq() +
+					" received a message from HA seq: "+((Message) ev).seq() +
 					" at time "+SimEngine.getTime());
 		}
 		if (ev instanceof ICMP)
 		{
-			System.out.println("Node "+_id.networkId()+ "." + _id.nodeId() +
-					" receives message with seq: "+((Message) ev).seq() +
-					" at time "+SimEngine.getTime());
 			if(ev instanceof ICMPRouterAdvertisement)
-			{
-				// Look at the router advertisement, if the router has a FA send a binding update
-				System.out.println(" The mobile node recived a router advertisement ");
+			{				
 				ICMPRouterAdvertisement mRA = (ICMPRouterAdvertisement) ev;
-				if(mRA.ismRouterHasFA()){
-					ICMPBindingUpdate toFA = new ICMPBindingUpdate(mRA.source(), mHA,
-							_id, mHA, mIdentity);
-					send(_peer, toFA, 0);
+				_id = mRA.getCoA();
+				System.out.println("The mobile node recived a router advertisement with a CoA "
+						+_id.networkId()+","+ _id.nodeId()  +" at time "+SimEngine.getTime());
+				SendBindingUpdate();
+				System.out.println("MN sent a Binding Update message to home agent "
+				+ mHA.networkId()+","+mHA.nodeId()
+				+" at time "+SimEngine.getTime());
 				}
 			}
 			if(ev instanceof ICMPBindingAck)
 			{
-				System.out.println("MN received a binding ACK, everything is working just fine :D");
-			}
+				ICMPBindingAck mICMP = (ICMPBindingAck) ev;
+				System.out.println("MN received a binding ACK, the binding status is "+ mICMP.getmBindingStatus());
 		}
 	}
+	private void SendBindingUpdate(){
+		ICMPBindingUpdate mUP = new ICMPBindingUpdate(_id, mHA, mIdentity);
+		send(_peer ,mUP ,0 );
+	}
 	public void SendRouterSolicitation(int mDelay){
-		// I assume (0,0) is the layer 3 broadcast address
-		ICMPRouterSolicitation RC = new ICMPRouterSolicitation(_id,new NetworkAddr(0, 0)); 
-		send(_peer,RC, mDelay);
+		ICMPRouterSolicitation RS = new ICMPRouterSolicitation(_id,new NetworkAddr(0, 0));
+		send(_peer, RS, mDelay);
 	}
 	public NetworkAddr getmHA() {
 		return mHA;

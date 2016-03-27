@@ -7,17 +7,20 @@ public class ICMPBindingAck extends ICMP{
 	 * Binding status (successful or not)
 	 * */
 	private int mMNIdentity;
+	private boolean mBindingStatus;
 	
-	private boolean mBindingSuccessful;
-	ICMPBindingAck(NetworkAddr from, NetworkAddr to, int mMNIdentity, boolean mBindingSuccessful) {
+	ICMPBindingAck(NetworkAddr from, NetworkAddr to, int mMNIdentity, boolean mBindingStatus) {
 		super(from, to);
 		this.mMNIdentity 		= mMNIdentity;
-		this.mBindingSuccessful = mBindingSuccessful;
-	}
-	public boolean ismBindingSuccessful() {
-		return mBindingSuccessful;
+		this.mBindingStatus = mBindingStatus;
 	}
 	public int getmIdentity() {
 		return mMNIdentity;
+	}
+	public boolean getmBindingStatus() {
+		return mBindingStatus;
+	}
+	public void setmBindingStatus(boolean mBindingStatus) {
+		this.mBindingStatus = mBindingStatus;
 	}
 }

@@ -1,10 +1,8 @@
 package Sim;
 
-import java.util.Hashtable;
-
 public class HomeAgent extends Node{
 
-	private Hashtable<Integer, NetworkAddr> mBindingTable = new Hashtable<Integer, NetworkAddr>();
+	private NetworkAddr mMN ;
 	
 	public HomeAgent(int network, int node) {
 		super(network, node);
@@ -22,8 +20,8 @@ public class HomeAgent extends Node{
 						" receives a binding update from "+ 
 						ICMP.source().networkId()+"." + ICMP.source().nodeId());
 				// Add the MN to Table, {ID : CoA}
-				mBindingTable.put(ICMP.getmIdentity(), ICMP.source());
-				
+				//mBindingTable.put(ICMP.getmIdentity(), ICMP.source());
+				mMN = ICMP.source();
 				// Create a new ICMPBindingACK 
 				ICMPBindingAck toMN = new ICMPBindingAck(_id,ICMP.source(),ICMP.getmIdentity(), true);
 				
@@ -40,9 +38,15 @@ public class HomeAgent extends Node{
 		}
 		if(ev instanceof Message){
 			Message mMsg = (Message) ev;
-			Tunnel mTunnel = new Tunnel(_id, new NetworkAddr(2, 1), mMsg._seq, mMsg);
+			Tunnel mTunnel = new Tunnel(_id, new NetworkAddr(4, 1), mMsg._seq, mMsg);
 			send(_peer , mTunnel, 0);
 			System.out.println("HA tunneld a message form "+ mMsg.source().networkId() +"."+ mMsg.source().nodeId());
 		}
-		}
+	}
+	public NetworkAddr getmMN() {
+		return mMN;
+	}
+	public void setmMN(NetworkAddr mMN) {
+		this.mMN = mMN;
+	}
 }

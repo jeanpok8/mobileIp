@@ -17,7 +17,6 @@ public class Router extends SimEnt {
 	SimEnt _router;
 	
 	// The foreign and home agent
-	private NetworkAddr mFAAddr;
 	private NetworkAddr mHAAddr;
 
 	// When created, number of interfaces are defined
@@ -85,44 +84,68 @@ public class Router extends SimEnt {
 	public void recv(SimEnt source, Event event) {
 
 		if (event instanceof Message) {
+			Message msg = (Message) event;
 
-			if (getInterface(((Message) event).destination().networkId()) != null) {
-				SimEnt sendNext = getInterface(((Message) event).destination().networkId());
+			if (getInterface(msg.destination().networkId()) != null) {
+				SimEnt sendNext = getInterface(msg.destination().networkId());
 				send(sendNext, event, _now);
-				System.out.println(_name + " handles packet with seq: " + ((Message) event).seq()+
-						" from node: "+((Message) event).source().networkId()+"." + ((Message) event).source().nodeId()
-						+" to node "+((Message) event).destination().networkId()+"."+((Message) event).destination().nodeId());
-                       System.out.println(_name + " sends to node: " + ((Message) event).destination().networkId()+"." +
-						((Message) event).destination().nodeId());
-
+				System.out.println(_name + " handles packet with seq: " + msg.seq()+
+						" from node: "+msg.source().networkId()+"." + msg.source().nodeId()
+						+" to node "+msg.destination().networkId()+"."+msg.destination().nodeId());
+                       System.out.println(_name + " sends to node: " + msg.destination().networkId()+"." +
+                    		   msg.destination().nodeId());
 			} else {
-
-				System.out.println(_name + " handles packet with seq: " + ((Message) event).seq() + " from node:"
-						+ ((Message) event).source().networkId() + "." + ((Message) event).source().nodeId());
-				System.out.println(_name + "-->forwards packet, to the serial Link "+" at time "+SimEngine.getTime());
+				System.out.println(_name + " handles packet with seq: " + msg.seq() + " from node:"
+						+ msg.source().networkId() + "." + msg.source().nodeId());
+				System.out.println(_name + "-->forwards packet, to the serial Link "
+						+" at time "+SimEngine.getTime());
 				send(temporalTable.get(_router), event,SimEngine.getTime());
 			}
 		}
-		// when the router get a solicitation message it will look
-		// if it has a foreign or home agent connected to it
+		// when the router get a solicitation message it will reply with 
+		// a router solicitation message carring a network address.(similar to DHCP)
 		// then it will create a RA and sent it to the source of the RC
 		if (event instanceof ICMPRouterSolicitation) {
-			ICMPRouterSolicitation mRC = (ICMPRouterSolicitation) event;
-			ICMPRouterAdvertisement mRA = new ICMPRouterAdvertisement(new NetworkAddr(0, 0), mRC.source());
+			System.out.println(_name + " receices a ICMP solicitation msg from node: "+
+		((ICMP) event).source().networkId() + "." + ((ICMP) event).source().nodeId()
+		+" at time "+SimEngine.getTime());
+			ICMPRouterSolicitation mRS = (ICMPRouterSolicitation) event;
+			
+			ICMPRouterAdvertisement mRA = new ICMPRouterAdvertisement(new NetworkAddr(0, 0), mRS.source());
+			// add the HA address to the message if there is any connected to it.
 			if(mHAAddr != null){
 				mRA.setmRouterHasHA(true);
 				mRA.setmHA(mHAAddr);
 			}
-			if(mFAAddr != null){
-				mRA.setmRouterHasFA(true);
-				mRA.setmFA(mFAAddr);
-			}
+			// add a address for the node
+			mRA.setCoA(new NetworkAddr(9, 9));
+			
 			// send the message to the source 
+			SimEnt sendNext = getInterface(mRS.source().networkId());
+			send(sendNext, mRA, _now);
+			System.out.println(_name + " send a router advertisiment msg to node: "+
+					((ICMP) event).source().networkId() + "." + ((ICMP) event).source().nodeId()
+					+" at time "+SimEngine.getTime());
+			}
+		if (event instanceof ICMPBindingUpdate || event instanceof ICMPBindingAck) {
+			ICMP mICMP = (ICMP) event;
+
+			if (getInterface(mICMP.destination().networkId()) != null) {
+				SimEnt sendNext = getInterface(mICMP.destination().networkId());
+				send(sendNext, event, _now);
+				System.out.println(_name + " handles ICMP msg " + 
+						" from node: "+mICMP.source().networkId()+"." + mICMP.source().nodeId()
+						+" to node "+mICMP.destination().networkId()+"."+mICMP.destination().nodeId());
+                       System.out.println(_name + " sends to node: " + mICMP.destination().networkId()+"." +
+                    		   mICMP.destination().nodeId());
+			} else {
+				System.out.println(_name + " handles ICMP msg " + " from node:"
+						+ mICMP.source().networkId() + "." + mICMP.source().nodeId());
+				System.out.println(_name + "-->forwards packet, to the serial Link "
+						+" at time "+SimEngine.getTime());
+				send(temporalTable.get(_router), event,SimEngine.getTime());
+			}
 		}
-	}
-	// Connect the foreign agent to the Router.
-	public void connectFA(ForeignAgent mAgent){
-		mFAAddr = mAgent._id;
 	}
 	// Connect the home agent to the Router.
 	public void connectHA(HomeAgent mAgent){

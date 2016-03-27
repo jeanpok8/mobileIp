@@ -9,20 +9,17 @@ public class Run {
 		Link link2 = new Link(2);
 		Link link3 = new Link(3);// serial link.
 		Link link4 = new Link(4);
-		Link link5 = new Link(5);
 		
 
 		
 		Node host1 = new Node(1, 2);
 		host1.setPeer(link1);
 		
-		HomeAgent mHA = new HomeAgent(1,1);
+		HomeAgent mHA = new HomeAgent(3,1);
 		mHA.setPeer(link2);
 		
-		ForeignAgent mFA = new ForeignAgent(2, 2);
-		mFA.setPeer(link5);
-		
-		MobileNode mMN = new MobileNode(2, 1, 22545, new NetworkAddr(1, 1));
+		NetworkAddr mHAAddress = new NetworkAddr(1, 1);
+		MobileNode mMN = new MobileNode(4, 1, 22545, mHAAddress);
 		mMN.setPeer(link4);
 		
 		// Set the serial interface
@@ -39,13 +36,12 @@ public class Run {
 		routeNodeA.connectInterface(1, link2, mHA);
 		
 		routeNodeB.connectInterface(0, link4, mMN);
-		routeNodeB.connectInterface(1, link5, mFA);
 		
 		// pass HA and FA addresses to the routers
 		routeNodeA.connectHA(mHA);
-		routeNodeB.connectFA(mFA);
 		
-		host1.StartSending(1, 1, 1, 5, 1);
+		host1.StartSending(1, 1, 2, 20, 1);
+		
 		mMN.SendRouterSolicitation(5);
 		// Start the simulation engine and of we go!
 		Thread t = new Thread(SimEngine.instance());

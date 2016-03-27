@@ -30,7 +30,7 @@ public class Link extends SimEnt{
 	{
 		if (ev instanceof Message)
 		{
-			System.out.println("Link "+ _mIdentity +"  passes msg through with seq: "+ ((Message) ev).seq()+
+			System.out.println("Link "+ _mIdentity +"  passes msg through "+
 					" from node: " + ((Message) ev).source().networkId()+"." + ((Message) ev).source().nodeId()+
 					" to node: " + ((Message) ev).destination().networkId()+"." + ((Message) ev).destination().nodeId()
 					+ " at time " + SimEngine.getTime());

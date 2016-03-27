@@ -30,10 +30,7 @@ public class ForeignAgent extends Node{
 				mVisitorTable.put(ICMP.getmIdentity(), ICMP.source());
 				
 				// Create a new ICMPBinding update, the destentaion is HA now
-				ICMPBindingUpdate toHA = new ICMPBindingUpdate(ICMP.source(), ICMP.getmHomeAddress(),
-						ICMP.getmCoA(), ICMP.getmHomeAddress(), ICMP.getmIdentity());
 				// Forward the message to MN's Home agent
-				send(_peer , toHA, 0);
 			}
 			if(ev instanceof ICMPBindingAck){
 				ICMPBindingAck ICMP = (ICMPBindingAck) ev;
@@ -44,7 +41,6 @@ public class ForeignAgent extends Node{
 					
 				}
 			}
-			}
 		}
-
+	}
 }

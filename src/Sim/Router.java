@@ -213,7 +213,7 @@ public class Router extends SimEnt {
 			SimEnt sendNext = getInterface(mRS.source().networkId());
 			send(sendNext, mRA, _now);
 			System.out
-					.println(_name + " send a router advertisiment msg to node: " + ((ICMP) event).source().networkId()
+					.println(_name + " sends a router advertisiment msg to node: " + ((ICMP) event).source().networkId()
 							+ "." + ((ICMP) event).source().nodeId() + " at time " + SimEngine.getTime());
 		}
 

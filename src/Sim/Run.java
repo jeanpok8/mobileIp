@@ -44,7 +44,7 @@ public class Run {
 		
 		mMN.SendRouterSolicitation(5);
 		mMN.disconnect(5);
-		routeNodeA.reConnect(link4,2,mMN,11);
+		routeNodeA.reConnect(link4,2,mMN,11);//reconnect MN to the router A
 	
 	
 		// Start the simulation engine and of we go!

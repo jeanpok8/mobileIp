@@ -40,7 +40,7 @@ public class Run {
 		routeNodeA.connectHA(mHA);
 		
 		host1.StartSending(1, 1, 2, 20, 1);
-		host1.StartSending(4, 1, 2, 30, 150);
+	
 		
 		mMN.SendRouterSolicitation(5);
 		mMN.disconnect(5);

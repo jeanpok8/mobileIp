@@ -134,7 +134,7 @@ public class Router extends SimEnt {
 	}
 
 	/**
-	 * This methods reconnect a node at a precised time.
+	 * This methods reconnect a node to the router at a precised time.
 	 * 
 	 * @param peer
 	 * @param interfaceNumber

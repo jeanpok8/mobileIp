@@ -41,7 +41,7 @@ public class MobileNode extends Node {
 			if (ev instanceof ICMPRouterAdvertisement) {
 				ICMPRouterAdvertisement mRA = (ICMPRouterAdvertisement) ev;
 				_id = mRA.getCoA();
-				System.out.println("The mobile node recived a router advertisement with a CoA " + _id.networkId() + ","
+				System.out.println("The mobile node received a router advertisement with a CoA " + _id.networkId() + ","
 						+ _id.nodeId() + " at time " + SimEngine.getTime());
 				SendBindingUpdate();
 				System.out.println("MN sent a Binding Update message to home agent " + mHA.networkId() + ","
